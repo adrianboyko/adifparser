@@ -1,9 +1,9 @@
 package main
 
 import (
+	"adifparser"
 	"flag"
 	"fmt"
-	"github.com/Matir/adifparser"
 	"io"
 	"os"
 )
