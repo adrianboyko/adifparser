@@ -25,10 +25,11 @@ type lotwClientImpl struct {
 	// Temporary read buffer
 	buf []byte
 	// Options
-	qsl_only      bool
-	qso_mydetail  bool
-	qso_qsldetail bool
-	qso_withown   bool
+	Qsl_only      bool
+	Qso_mydetail  bool
+	Qso_qsldetail bool
+	Qso_withown   bool
+	Qso_rx_since  string // YYYY-MM-DD HH:MM:SS, time part optional
 	// TODO: state storage
 }
 
@@ -40,10 +41,11 @@ func NewLOTWClient(username, password string) *lotwClientImpl {
 	client.buf = make([]byte, 0, 1024)
 
 	// Default options
-	client.qsl_only = false
-	client.qso_mydetail = true
-	client.qso_qsldetail = true
-	client.qso_withown = true
+	client.Qsl_only = false
+	client.Qso_mydetail = true
+	client.Qso_qsldetail = true
+	client.Qso_withown = true
+	client.Qso_rx_since = ""
 
 	return client
 }
@@ -118,19 +120,22 @@ func (c *lotwClientImpl) getParams() map[string]string {
 		"password":  c.password,
 		"qso_query": "1",
 	}
-	if c.qsl_only {
+	if c.Qsl_only {
 		params["qso_qsl"] = "yes"
 	} else {
 		params["qso_qsl"] = "no"
 	}
-	if c.qso_mydetail {
+	if c.Qso_mydetail {
 		params["qso_mydetail"] = "yes"
 	}
-	if c.qso_qsldetail {
+	if c.Qso_qsldetail {
 		params["qso_qsldetail"] = "yes"
 	}
-	if c.qso_withown {
+	if c.Qso_withown {
 		params["qso_withown"] = "yes"
+	}
+	if c.Qso_rx_since > "" {
+		params["qso_qsorxsince"] = c.Qso_rx_since
 	}
 	return params
 }
